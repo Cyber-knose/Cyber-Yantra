@@ -135,15 +135,10 @@ Binary ➜ Text
 
 ## Main Dashboard
 
-<img src="assets/screenshot1.png" width="100%">
+<img src="ft.png" width="65%">
 
 ---
 
-## Feature Showcase
-
-<img src="assets/features.png" width="100%">
-
----
 
 # 🛠 Tech Stack
 
