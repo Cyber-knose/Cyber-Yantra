@@ -52,6 +52,28 @@ No data leaves your computer.
 
 <img src="Cyantra.png" width="100%">
 
+
+----
+
+
+## 🎯 Uses of Cyber Yantra
+
+Cyber Yantra is a versatile cybersecurity toolkit designed for a wide range of users and security-related tasks, including:
+
+- 🛡️ Ethical Hacking & Penetration Testing
+- 🏴 Capture The Flag (CTF) Challenges
+- 🐞 Bug Bounty Hunting
+- 🔍 Digital Forensics & Incident Response
+- 🔬 Security Research & Malware Analysis
+- 👨‍💻 Web & Software Development
+- 🌐 URL, Base64, ASCII & Binary Encoding/Decoding
+- 🔐 Hash Generation & File Integrity Verification
+- 📂 File Hash Analysis
+- 📚 Cybersecurity Learning & Training
+- 💼 IT Administration & System Management
+- 🚀 Everyday Data Conversion & Productivity Tasks
+
+
 ---
 
 ## 🔐 Hash Generator
