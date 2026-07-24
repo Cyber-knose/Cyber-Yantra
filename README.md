@@ -16,7 +16,12 @@ Hash Generator • File Hash • Base64 • URL • ASCII • Binary
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Responsive](https://img.shields.io/badge/Responsive-Yes-success?style=for-the-badge)
-![Open Source](https://img.shields.io/badge/Open%20Source-❤-blue?style=for-the-badge)
+![Open Source](https://img.shields.io/badge/Open%20Source-❤-blue?style=for-the-badge) 
+![Web Crypto API](https://img.shields.io/badge/Web_Crypto_API-4285F4?style=for-the-badge)
+![CryptoJS](https://img.shields.io/badge/CryptoJS-FF6F00?style=for-the-badge)
+![FileReader API](https://img.shields.io/badge/FileReader_API-4CAF50?style=for-the-badge)
+![Bootstrap Icons](https://img.shields.io/badge/Bootstrap_Icons-7952B3?style=for-the-badge&logo=bootstrap)
+![Google Fonts](https://img.shields.io/badge/Google_Fonts-4285F4?style=for-the-badge&logo=googlefonts&logoColor=white)
 
 </div>
 
