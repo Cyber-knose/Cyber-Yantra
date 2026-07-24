@@ -227,29 +227,6 @@ Use VS Code Live Server.
 
 ✅ No Backend Required
 
----
-
-# 📈 Future Roadmap
-
-- AES Encryption
-- RSA Encryption
-- JWT Decoder
-- JWT Generator
-- Morse Code
-- Hex Converter
-- ROT13
-- Caesar Cipher
-- Password Generator
-- Password Strength Checker
-- DNS Lookup
-- WHOIS Lookup
-- IP Lookup
-- SSL Certificate Viewer
-- QR Generator
-- QR Scanner
-- Hash Cracker Dictionary Mode
-- Text Difference Tool
-- JSON Formatter
 
 ---
 
