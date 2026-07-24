@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Yantra - Hash & Encoding Toolkit</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0ff;
+            border-radius: 3px;
+            box-shadow: 0 0 10px #0ff;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, rgba(0,255,255,0.05), rgba(255,0,255,0.05));
+            border: 1px solid rgba(0,255,255,0.2);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,255,255,0.03) 0%, transparent 60%);
+            animation: headerGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes headerGlow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 20px); }
+        }
+
+        .header h1 {
+            font-size: 3em;
+            font-weight: 800;
+            background: linear-gradient(90deg, #0ff, #f0f, #0ff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+            position: relative;
+            text-shadow: none;
+            letter-spacing: 4px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+            100% { background-position: 0% center; }
+        }
+
+        .header .subtitle {
+            margin-top: 10px;
+            font-size: 1em;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+        }
+
+        .header .subtitle span {
+            color: #0ff;
+            text-shadow: 0 0 10px rgba(0,255,255,0.5);
+        }
+
+        .header .credit {
+            margin-top: 15px;
+            font-size: 0.85em;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 2px;
+        }
+
+        .header .credit strong {
+            color: #f0f;
+            text-shadow: 0 0 10px rgba(255,0,255,0.5);
+        }
+
+        /* ===== NEON GLOW LINE ===== */
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #0ff, #f0f, transparent);
+            margin: 20px 0 30px;
+            box-shadow: 0 0 20px rgba(0,255,255,0.3);
+        }
+
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: 1px solid rgba(0,255,255,0.3);
+            color: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .tab-btn:hover {
+            background: rgba(0,255,255,0.1);
+            border-color: #0ff;
+            color: #0ff;
+            box-shadow: 0 0 20px rgba(0,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: rgba(0,255,255,0.15);
+            border-color: #0ff;
+            color: #0ff;
+            box-shadow: 0 0 25px rgba(0,255,255,0.3), inset 0 0 25px rgba(0,255,255,0.05);
+        }
+
+        /* ===== TAB CONTENT ===== */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== CARDS / PANELS ===== */
+        .panel {
+            background: linear-gradient(135deg, rgba(0,255,255,0.03), rgba(255,0,255,0.03));
+            border: 1px solid rgba(0,255,255,0.15);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .panel:hover {
+            border-color: rgba(0,255,255,0.3);
+            box-shadow: 0 0 30px rgba(0,255,255,0.05);
+        }
+
+        .panel h2 {
+            font-size: 1.3em;
+            color: #0ff;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(0,255,255,0.3);
+        }
+
+        .panel h2 .icon {
+            margin-right: 10px;
+        }
+
+        /* ===== FORM ELEMENTS ===== */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85em;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        textarea, input[type="text"], input[type="file"], select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(0,255,255,0.2);
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        textarea:focus, input[type="text"]:focus, select:focus {
+            border-color: #0ff;
+            box-shadow: 0 0 20px rgba(0,255,255,0.15);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        textarea.output {
+            min-height: 100px;
+            background: rgba(0,0,0,0.7);
+            border-color: rgba(0,255,255,0.3);
+            color: #0ff;
+            cursor: text;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230ff' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        select option {
+            background: #0a0a0f;
+            color: #e0e0e0;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0ff, #00ccff);
+            color: #0a0a0f;
+            box-shadow: 0 0 20px rgba(0,255,255,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(0,255,255,0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255,0,255,0.4);
+            color: #f0f;
+            box-shadow: 0 0 15px rgba(255,0,255,0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,0,255,0.1);
+            box-shadow: 0 0 25px rgba(255,0,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #0f0, #00cc00);
+            color: #0a0a0f;
+            box-shadow: 0 0 20px rgba(0,255,0,0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(0,255,0,0.5);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f0f, #cc00cc);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255,0,255,0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(255,0,255,0.5);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 5px;
+        }
+
+        /* ===== HASH RESULT GRID ===== */
+        .hash-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .hash-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(0,255,255,0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .hash-item:hover {
+            border-color: rgba(0,255,255,0.3);
+        }
+
+        .hash-item .label {
+            min-width: 90px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            font-size: 0.8em;
+            letter-spacing: 1px;
+        }
+
+        .hash-item .value {
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #0ff;
+            word-break: break-all;
+            text-shadow: 0 0 5px rgba(0,255,255,0.2);
+        }
+
+        .hash-item .copy-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid rgba(0,255,255,0.3);
+            color: #0ff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75em;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .hash-item .copy-btn:hover {
+            background: rgba(0,255,255,0.15);
+            box-shadow: 0 0 15px rgba(0,255,255,0.2);
+        }
+
+        /* ===== FILE UPLOAD ===== */
+        .file-drop-zone {
+            border: 2px dashed rgba(0,255,255,0.3);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-drop-zone:hover, .file-drop-zone.dragover {
+            border-color: #0ff;
+            background: rgba(0,255,255,0.05);
+            box-shadow: 0 0 30px rgba(0,255,255,0.1);
+        }
+
+        .file-drop-zone .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .file-drop-zone p {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9em;
+        }
+
+        .file-drop-zone p strong {
+            color: #0ff;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 14px 24px;
+            background: rgba(0,0,0,0.9);
+            border: 1px solid #0ff;
+            border-radius: 8px;
+            color: #0ff;
+            font-size: 0.9em;
+            box-shadow: 0 0 30px rgba(0,255,255,0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            z-index: 9999;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== STATUS BADGE ===== */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .status-badge.success {
+            background: rgba(0,255,0,0.15);
+            color: #0f0;
+            border: 1px solid rgba(0,255,0,0.3);
+        }
+
+        .status-badge.processing {
+            background: rgba(255,255,0,0.15);
+            color: #ff0;
+            border: 1px solid rgba(255,255,0,0.3);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            .tab-btn {
+                padding: 10px 16px;
+                font-size: 0.75em;
+            }
+            .panel {
+                padding: 18px;
+            }
+            .hash-item {
+                flex-wrap: wrap;
+            }
+            .hash-item .label {
+                min-width: 70px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .header h1 {
+                font-size: 1.5em;
+                letter-spacing: 2px;
+            }
+            .header .subtitle {
+                font-size: 0.75em;
+                letter-spacing: 3px;
+            }
+            .panel h2 {
+                font-size: 1em;
+            }
+        }
+
+        /* ===== LOADING SPINNER ===== */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(0,255,255,0.2);
+            border-top-color: #0ff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(0,255,255,0.1);
+            color: rgba(255,255,255,0.3);
+            font-size: 0.8em;
+            letter-spacing: 1px;
+        }
+
+        .footer strong {
+            color: #f0f;
+            text-shadow: 0 0 10px rgba(255,0,255,0.3);
+        }
+
+        /* ===== BINARY TABLE ===== */
+        .binary-output {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #0ff;
+            word-break: break-all;
+            line-height: 1.8;
+        }
+
+        .binary-output .byte {
+            display: inline-block;
+            padding: 2px 6px;
+            margin: 1px;
+            background: rgba(0,255,255,0.05);
+            border: 1px solid rgba(0,255,255,0.1);
+            border-radius: 3px;
+        }
+
+        /* ===== CONVERTER ROW ===== */
+        .converter-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .converter-row .arrow {
+            font-size: 1.5em;
+            color: #0ff;
+            text-shadow: 0 0 15px rgba(0,255,255,0.5);
+        }
+
+        @media (max-width: 600px) {
+            .converter-row {
+                grid-template-columns: 1fr;
+            }
+            .converter-row .arrow {
+                text-align: center;
+                transform: rotate(90deg);
+            }
+        }
+
+        /* ===== URL ENCODE / DECODE ===== */
+        .url-options {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .url-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85em;
+            cursor: pointer;
+        }
+
+        .url-options input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0ff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ===== HEADER ===== -->
+        <header class="header">
+            <h1>⚡ CYBER YANTRA</h1>
+            <div class="subtitle">Hash Generator &bull; Encoder &bull; Decoder <span>Toolkit</span></div>
+            <div class="credit">Created by <strong>Priyanshu Jangra</strong></div>
+        </header>
+
+        <div class="divider"></div>
+
+        <!-- ===== TABS ===== -->
+        <nav class="tabs" id="tabs">
+            <button class="tab-btn active" data-tab="hash">🔐 Hash</button>
+            <button class="tab-btn" data-tab="file-hash">📁 File Hash</button>
+            <button class="tab-btn" data-tab="base64">🔡 Base64</button>
+            <button class="tab-btn" data-tab="url">🔗 URL</button>
+            <button class="tab-btn" data-tab="ascii">📝 ASCII</button>
+            <button class="tab-btn" data-tab="binary">💻 Binary</button>
+        </nav>
+
+        <!-- ===== TAB 1: HASH GENERATOR ===== -->
+        <div class="tab-content active" id="tab-hash">
+            <div class="panel">
+                <h2><span class="icon">🔐</span> Hash Generator</h2>
+                <div class="form-group">
+                    <label for="hash-input">Enter Text</label>
+                    <textarea id="hash-input" placeholder="Type or paste text to hash..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="generateHashes()">⚡ Generate Hashes</button>
+                    <button class="btn btn-secondary" onclick="clearHash()">✕ Clear</button>
+                </div>
+                <div style="margin-top: 20px;">
+                    <div class="hash-grid" id="hash-results">
+                        <div class="hash-item">
+                            <span class="label">MD5</span>
+                            <span class="value" id="hash-md5">—</span>
+                            <button class="copy-btn" onclick="copyToClipboard('hash-md5')">Copy</button>
+                        </div>
+                        <div class="hash-item">
+                            <span class="label">SHA-1</span>
+                            <span class="value" id="hash-sha1">—</span>
+                            <button class="copy-btn" onclick="copyToClipboard('hash-sha1')">Copy</button>
+                        </div>
+                        <div class="hash-item">
+                            <span class="label">SHA-256</span>
+                            <span class="value" id="hash-sha256">—</span>
+                            <button class="copy-btn" onclick="copyToClipboard('hash-sha256')">Copy</button>
+                        </div>
+                        <div class="hash-item">
+                            <span class="label">SHA-512</span>
+                            <span class="value" id="hash-sha512">—</span>
+                            <button class="copy-btn" onclick="copyToClipboard('hash-sha512')">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 2: FILE HASH ===== -->
+        <div class="tab-content" id="tab-file-hash">
+            <div class="panel">
+                <h2><span class="icon">📁</span> File Hash</h2>
+                <div class="form-group">
+                    <label for="file-hash-input">Select File</label>
+                    <div class="file-drop-zone" id="fileDropZone" onclick="document.getElementById('fileInput').click()">
+                        <div class="icon">📂</div>
+                        <p>Drop a file here or <strong>browse</strong> to select</p>
+                        <input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(event)">
+                    </div>
+                    <div id="fileInfo" style="margin-top:12px; display:none;">
+                        <span class="status-badge success">File Selected</span>
+                        <span id="fileName" style="margin-left:10px; color:rgba(255,255,255,0.7);"></span>
+                        <span id="fileSize" style="margin-left:10px; color:rgba(255,255,255,0.4); font-size:0.85em;"></span>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="generateFileHashes()">⚡ Hash File</button>
+                    <button class="btn btn-secondary" onclick="clearFileHash()">✕ Clear</button>
+                </div>
+                <div style="margin-top: 20px;">
+                    <div class="hash-grid" id="file-hash-results">
+                        <div class="hash-item">
+                            <span class="label">MD5</span>
+                            <span class="value" id="filehash-md5">—</span>
+                            <button class="copy-btn" onclick="copyToClipboard('filehash-md5')">Copy</button>
+                        </div>
+                        <div class="hash-item">
+                            <span class="label">SHA-1</span>
+                            <span class="value" id="filehash-sha1">—</span>
+                            <button class="copy-btn" onclick="copyToClipboard('filehash-sha1')">Copy</button>
+                        </div>
+                        <div class="hash-item">
+                            <span class="label">SHA-256</span>
+                            <span class="value" id="filehash-sha256">—</span>
+                            <button class="copy-btn" onclick="copyToClipboard('filehash-sha256')">Copy</button>
+                        </div>
+                        <div class="hash-item">
+                            <span class="label">SHA-512</span>
+                            <span class="value" id="filehash-sha512">—</span>
+                            <button class="copy-btn" onclick="copyToClipboard('filehash-sha512')">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 3: BASE64 ===== -->
+        <div class="tab-content" id="tab-base64">
+            <div class="panel">
+                <h2><span class="icon">🔡</span> Base64 Encode / Decode</h2>
+                <div class="form-group">
+                    <label for="base64-input">Input Text</label>
+                    <textarea id="base64-input" placeholder="Enter text to encode or decode..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="base64Encode()">⬇ Encode</button>
+                    <button class="btn btn-success" onclick="base64Decode()">⬆ Decode</button>
+                    <button class="btn btn-secondary" onclick="clearBase64()">✕ Clear</button>
+                </div>
+                <div class="form-group" style="margin-top:15px;">
+                    <label for="base64-output">Output</label>
+                    <textarea id="base64-output" class="output" placeholder="Result will appear here..." readonly></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 4: URL ENCODE/DECODE ===== -->
+        <div class="tab-content" id="tab-url">
+            <div class="panel">
+                <h2><span class="icon">🔗</span> URL Encode / Decode</h2>
+                <div class="form-group">
+                    <label for="url-input">Input Text / URL</label>
+                    <textarea id="url-input" placeholder="Enter URL or text to encode/decode..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="urlEncode()">⬇ Encode</button>
+                    <button class="btn btn-success" onclick="urlDecode()">⬆ Decode</button>
+                    <button class="btn btn-secondary" onclick="clearUrl()">✕ Clear</button>
+                </div>
+                <div class="form-group" style="margin-top:15px;">
+                    <label for="url-output">Output</label>
+                    <textarea id="url-output" class="output" placeholder="Result will appear here..." readonly></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 5: ASCII CONVERTER ===== -->
+        <div class="tab-content" id="tab-ascii">
+            <div class="panel">
+                <h2><span class="icon">📝</span> ASCII Converter</h2>
+                <div class="form-group">
+                    <label for="ascii-input">Text</label>
+                    <textarea id="ascii-input" placeholder="Enter text to convert to ASCII codes..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="asciiToText()">⬇ Text → ASCII</button>
+                    <button class="btn btn-success" onclick="textToAscii()">⬆ ASCII → Text</button>
+                    <button class="btn btn-secondary" onclick="clearAscii()">✕ Clear</button>
+                </div>
+                <div class="form-group" style="margin-top:15px;">
+                    <label for="ascii-output">Output</label>
+                    <textarea id="ascii-output" class="output" placeholder="Result will appear here..." readonly></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 6: BINARY ===== -->
+        <div class="tab-content" id="tab-binary">
+            <div class="panel">
+                <h2><span class="icon">💻</span> Binary Converter</h2>
+                <div class="form-group">
+                    <label for="binary-input">Text</label>
+                    <textarea id="binary-input" placeholder="Enter text to convert to binary..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="textToBinary()">⬇ Text → Binary</button>
+                    <button class="btn btn-success" onclick="binaryToText()">⬆ Binary → Text</button>
+                    <button class="btn btn-secondary" onclick="clearBinary()">✕ Clear</button>
+                </div>
+                <div class="form-group" style="margin-top:15px;">
+                    <label for="binary-output">Output</label>
+                    <textarea id="binary-output" class="output" placeholder="Result will appear here..." readonly></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            ⚡ Cyber Yantra &bull; Created by <strong>Priyanshu Jangra</strong>
+        </footer>
+
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ====================================================
+        //  TAB SWITCHING
+        // ====================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active from all buttons and contents
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    // Activate current
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById('tab-' + tabId).classList.add('active');
+                });
+            });
+
+            // File drop zone
+            const dropZone = document.getElementById('fileDropZone');
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    document.getElementById('fileInput').files = files;
+                    handleFileSelect({ target: { files: files } });
+                }
+            });
+
+            // Enter key shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                    const activeTab = document.querySelector('.tab-content.active');
+                    if (activeTab) {
+                        const id = activeTab.id;
+                        if (id === 'tab-hash') generateHashes();
+                        else if (id === 'tab-file-hash') generateFileHashes();
+                        else if (id === 'tab-base64') base64Encode();
+                        else if (id === 'tab-url') urlEncode();
+                        else if (id === 'tab-ascii') asciiToText();
+                        else if (id === 'tab-binary') textToBinary();
+                    }
+                }
+            });
+        });
+
+        // ====================================================
+        //  TOAST NOTIFICATION
+        // ====================================================
+        let toastTimer = null;
+        function showToast(message, duration) {
+            duration = duration || 2000;
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        // ====================================================
+        //  CLIPBOARD
+        // ====================================================
+        function copyToClipboard(elementId) {
+            const el = document.getElementById(elementId);
+            const text = el.textContent;
+            if (!text || text === '—') {
+                showToast('Nothing to copy!', 1500);
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('✅ Copied to clipboard!');
+            }).catch(() => {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('✅ Copied to clipboard!');
+            });
+        }
+
+        // ====================================================
+        //  MD5 IMPLEMENTATION (Pure JS — Web Crypto doesn't support MD5)
+        // ====================================================
+        function md5Cycle(x, k) {
+            let a = x[0], b = x[1], c = x[2], d = x[3];
+            // FF
+            for (let i = 0; i < 16; i++) {
+                const f = (b & c) | (~b & d);
+                const g = i;
+                const temp = d;
+                d = c;
+                c = b;
+                b = b + ((a + f + k[i] + 0xd76aa478) << 7 | (a + f + k[i] + 0xd76aa478) >>> 25) | 0;
+                a = temp;
+            }
+            // GG
+            for (let i = 0; i < 16; i++) {
+                const f = (d & b) | (~d & c);
+                const g = (5 * i + 1) % 16;
+                const temp = a;
+                a = d;
+                d = c;
+                c = b;
+                b = b + ((a + f + k[g] + 0xe8c7b756) << 12 | (a + f + k[g] + 0xe8c7b756) >>> 20) | 0;
+                a = temp;
+            }
+            // HH
+            for (let i = 0; i < 16; i++) {
+                const f = b ^ c ^ d;
+                const g = (3 * i + 5) % 16;
+                const temp = d;
+                d = c;
+                c = b;
+                b = b + ((a + f + k[g] + 0x242070db) << 17 | (a + f + k[g] + 0x242070db) >>> 15) | 0;
+                a = temp;
+            }
+            // II
+            for (let i = 0; i < 16; i++) {
+                const f = c ^ (b | ~d);
+                const g = (7 * i) % 16;
+                const temp = b;
+                b = a;
+                a = d;
+                d = c;
+                c = c + ((a + f + k[g] + 0xfcefa3f8) << 22 | (a + f + k[g] + 0xfcefa3f8) >>> 10) | 0;
+                a = temp;
+            }
+            x[0] = (x[0] + a) | 0;
+            x[1] = (x[1] + b) | 0;
+            x[2] = (x[2] + c) | 0;
+            x[3] = (x[3] + d) | 0;
+        }
+
+        function md5String(str) {
+            const T = [
+                0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,
+                0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,0x6b901122,0xfd987193,0xa679438e,0x49b40821,
+                0xf61e2562,0xc040b340,0x265e5a51,0xe9b6c7aa,0xd62f105d,0x02441453,0xd8a1e681,0xe7d3fbc8,
+                0x21e1cde6,0xc33707d6,0xf4d50d87,0x455a14ed,0xa9e3e905,0xfcefa3f8,0x676f02d9,0x8d2a4c8a,
+                0xfffa3942,0x8771f681,0x6d9d6122,0xfde5380c,0xa4beea44,0x4bdecfa9,0xf6bb4b60,0xbebfbc70,
+                0x289b7ec6,0xeaa127fa,0xd4ef3085,0x04881d05,0xd9d4d039,0xe6db99e5,0x1fa27cf8,0xc4ac5665,
+                0xf4292244,0x432aff97,0xab9423a7,0xfc93a039,0x655b59c3,0x8f0ccc92,0xffeff47d,0x85845dd1,
+                0x6fa87e4f,0xfe2ce6e0,0xa3014314,0x4e0811a1,0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391
+            ];
+            // Convert string to bytes (UTF-8)
+            const bytes = [];
+            for (let i = 0; i < str.length; i++) {
+                let c = str.charCodeAt(i);
+                if (c < 0x80) bytes.push(c);
+                else if (c < 0x800) bytes.push(0xc0 | (c >> 6), 0x80 | (c & 0x3f));
+                else if (c < 0xd800 || c >= 0xe000) bytes.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
+                else { i++; c = 0x10000 + (((c & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff)); bytes.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 0x3f), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f)); }
+            }
+            const origLenBits = bytes.length * 8;
+            bytes.push(0x80);
+            while (bytes.length % 64 !== 56) bytes.push(0x00);
+            for (let i = 0; i < 8; i++) bytes.push((origLenBits >>> (i * 8)) & 0xff);
+
+            let h0 = 0x67452301, h1 = 0xefcdab89, h2 = 0x98badcfe, h3 = 0x10325476;
+            for (let block = 0; block < bytes.length; block += 64) {
+                const w = new Array(16);
+                for (let i = 0; i < 16; i++) {
+                    w[i] = bytes[block + i * 4] | (bytes[block + i * 4 + 1] << 8) | (bytes[block + i * 4 + 2] << 16) | (bytes[block + i * 4 + 3] << 24);
+                }
+                let a = h0, b = h1, c = h2, d = h3;
+                // Round 1
+                for (let i = 0; i < 16; i++) {
+                    const f = (b & c) | (~b & d);
+                    const g = i;
+                    const temp = d; d = c; c = b;
+                    b = (b + ((a + f + w[g] + T[i]) << 7 | (a + f + w[g] + T[i]) >>> 25)) | 0;
+                    a = temp;
+                }
+                // Round 2
+                for (let i = 16; i < 32; i++) {
+                    const f = (d & b) | (~d & c);
+                    const g = (5 * i + 1) % 16;
+                    const temp = a; a = d; d = c;
+                    c = (c + ((b + f + w[g] + T[i]) << 12 | (b + f + w[g] + T[i]) >>> 20)) | 0;
+                    b = temp;
+                }
+                // Round 3
+                for (let i = 32; i < 48; i++) {
+                    const f = b ^ c ^ d;
+                    const g = (3 * i + 5) % 16;
+                    const temp = d; d = c; c = b;
+                    b = (b + ((a + f + w[g] + T[i]) << 17 | (a + f + w[g] + T[i]) >>> 15)) | 0;
+                    a = temp;
+                }
+                // Round 4
+                for (let i = 48; i < 64; i++) {
+                    const f = c ^ (b | ~d);
+                    const g = (7 * i) % 16;
+                    const temp = b; b = a; a = d;
+                    d = (d + ((c + f + w[g] + T[i]) << 22 | (c + f + w[g] + T[i]) >>> 10)) | 0;
+                    c = temp;
+                }
+                h0 = (h0 + a) | 0;
+                h1 = (h1 + b) | 0;
+                h2 = (h2 + c) | 0;
+                h3 = (h3 + d) | 0;
+            }
+            const hex = (n) => {
+                const s = (n >>> 0).toString(16);
+                return '00000000'.slice(s.length) + s;
+            };
+            return hex(h0) + hex(h1) + hex(h2) + hex(h3);
+        }
+
+        function md5Buffer(buffer) {
+            const bytes = new Uint8Array(buffer);
+            const origLenBits = bytes.length * 8;
+            const padded = [];
+            for (let i = 0; i < bytes.length; i++) padded.push(bytes[i]);
+            padded.push(0x80);
+            while (padded.length % 64 !== 56) padded.push(0x00);
+            for (let i = 0; i < 8; i++) padded.push((origLenBits >>> (i * 8)) & 0xff);
+            // Process blocks
+            let h0 = 0x67452301, h1 = 0xefcdab89, h2 = 0x98badcfe, h3 = 0x10325476;
+            const T = [
+                0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,
+                0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,0x6b901122,0xfd987193,0xa679438e,0x49b40821,
+                0xf61e2562,0xc040b340,0x265e5a51,0xe9b6c7aa,0xd62f105d,0x02441453,0xd8a1e681,0xe7d3fbc8,
+                0x21e1cde6,0xc33707d6,0xf4d50d87,0x455a14ed,0xa9e3e905,0xfcefa3f8,0x676f02d9,0x8d2a4c8a,
+                0xfffa3942,0x8771f681,0x6d9d6122,0xfde5380c,0xa4beea44,0x4bdecfa9,0xf6bb4b60,0xbebfbc70,
+                0x289b7ec6,0xeaa127fa,0xd4ef3085,0x04881d05,0xd9d4d039,0xe6db99e5,0x1fa27cf8,0xc4ac5665,
+                0xf4292244,0x432aff97,0xab9423a7,0xfc93a039,0x655b59c3,0x8f0ccc92,0xffeff47d,0x85845dd1,
+                0x6fa87e4f,0xfe2ce6e0,0xa3014314,0x4e0811a1,0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391
+            ];
+            for (let block = 0; block < padded.length; block += 64) {
+                const w = new Array(16);
+                for (let i = 0; i < 16; i++) {
+                    w[i] = padded[block + i * 4] | (padded[block + i * 4 + 1] << 8) | (padded[block + i * 4 + 2] << 16) | (padded[block + i * 4 + 3] << 24);
+                }
+                let a = h0, b = h1, c = h2, d = h3;
+                for (let i = 0; i < 16; i++) { const f = (b & c) | (~b & d); const g = i; const t = d; d = c; c = b; b = (b + ((a + f + w[g] + T[i]) << 7 | (a + f + w[g] + T[i]) >>> 25)) | 0; a = t; }
+                for (let i = 16; i < 32; i++) { const f = (d & b) | (~d & c); const g = (5 * i + 1) % 16; const t = a; a = d; d = c; c = (c + ((b + f + w[g] + T[i]) << 12 | (b + f + w[g] + T[i]) >>> 20)) | 0; b = t; }
+                for (let i = 32; i < 48; i++) { const f = b ^ c ^ d; const g = (3 * i + 5) % 16; const t = d; d = c; c = b; b = (b + ((a + f + w[g] + T[i]) << 17 | (a + f + w[g] + T[i]) >>> 15)) | 0; a = t; }
+                for (let i = 48; i < 64; i++) { const f = c ^ (b | ~d); const g = (7 * i) % 16; const t = b; b = a; a = d; d = (d + ((c + f + w[g] + T[i]) << 22 | (c + f + w[g] + T[i]) >>> 10)) | 0; c = t; }
+                h0 = (h0 + a) | 0; h1 = (h1 + b) | 0; h2 = (h2 + c) | 0; h3 = (h3 + d) | 0;
+            }
+            const hex = (n) => { const s = (n >>> 0).toString(16); return '00000000'.slice(s.length) + s; };
+            return hex(h0) + hex(h1) + hex(h2) + hex(h3);
+        }
+
+        // ====================================================
+        //  HASH HELPER (Web Crypto API for SHA, JS MD5 for MD5)
+        // ====================================================
+        async function computeHash(algorithm, text) {
+            if (algorithm === 'MD5') {
+                return md5String(text);
+            }
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const hashBuffer = await crypto.subtle.digest(algorithm, data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function computeHashBuffer(algorithm, buffer) {
+            if (algorithm === 'MD5') {
+                return md5Buffer(buffer);
+            }
+            const hashBuffer = await crypto.subtle.digest(algorithm, buffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // ====================================================
+        //  TAB 1: HASH GENERATOR
+        // ====================================================
+        async function generateHashes() {
+            const input = document.getElementById('hash-input').value.trim();
+            if (!input) {
+                showToast('⚠️ Please enter text to hash!', 1500);
+                return;
+            }
+
+            const md5 = await computeHash('MD5', input);
+            const sha1 = await computeHash('SHA-1', input);
+            const sha256 = await computeHash('SHA-256', input);
+            const sha512 = await computeHash('SHA-512', input);
+
+            document.getElementById('hash-md5').textContent = md5;
+            document.getElementById('hash-sha1').textContent = sha1;
+            document.getElementById('hash-sha256').textContent = sha256;
+            document.getElementById('hash-sha512').textContent = sha512;
+
+            showToast('✅ Hashes generated successfully!');
+        }
+
+        function clearHash() {
+            document.getElementById('hash-input').value = '';
+            document.getElementById('hash-md5').textContent = '—';
+            document.getElementById('hash-sha1').textContent = '—';
+            document.getElementById('hash-sha256').textContent = '—';
+            document.getElementById('hash-sha512').textContent = '—';
+        }
+
+        // ====================================================
+        //  TAB 2: FILE HASH
+        // ====================================================
+        let selectedFile = null;
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                selectedFile = files[0];
+                document.getElementById('fileInfo').style.display = 'block';
+                document.getElementById('fileName').textContent = selectedFile.name;
+                const sizeKB = (selectedFile.size / 1024).toFixed(1);
+                document.getElementById('fileSize').textContent = `(${sizeKB} KB)`;
+                showToast(`📁 File selected: ${selectedFile.name}`);
+            }
+        }
+
+        async function generateFileHashes() {
+            if (!selectedFile) {
+                showToast('⚠️ Please select a file first!', 1500);
+                return;
+            }
+
+            const btn = document.querySelector('#tab-file-hash .btn-primary');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Hashing...';
+
+            try {
+                const buffer = await selectedFile.arrayBuffer();
+                const md5 = await computeHashBuffer('MD5', buffer);
+                const sha1 = await computeHashBuffer('SHA-1', buffer);
+                const sha256 = await computeHashBuffer('SHA-256', buffer);
+                const sha512 = await computeHashBuffer('SHA-512', buffer);
+
+                document.getElementById('filehash-md5').textContent = md5;
+                document.getElementById('filehash-sha1').textContent = sha1;
+                document.getElementById('filehash-sha256').textContent = sha256;
+                document.getElementById('filehash-sha512').textContent = sha512;
+
+                showToast('✅ File hashes generated successfully!');
+            } catch (err) {
+                showToast('❌ Error: ' + err.message, 2000);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '⚡ Hash File';
+            }
+        }
+
+        function clearFileHash() {
+            selectedFile = null;
+            document.getElementById('fileInput').value = '';
+            document.getElementById('fileInfo').style.display = 'none';
+            document.getElementById('filehash-md5').textContent = '—';
+            document.getElementById('filehash-sha1').textContent = '—';
+            document.getElementById('filehash-sha256').textContent = '—';
+            document.getElementById('filehash-sha512').textContent = '—';
+        }
+
+        // ====================================================
+        //  TAB 3: BASE64
+        // ====================================================
+        function base64Encode() {
+            const input = document.getElementById('base64-input').value;
+            if (!input) {
+                showToast('⚠️ Please enter text to encode!', 1500);
+                return;
+            }
+            try {
+                const encoded = btoa(unescape(encodeURIComponent(input)));
+                document.getElementById('base64-output').value = encoded;
+                showToast('✅ Encoded to Base64!');
+            } catch (e) {
+                showToast('❌ Encoding failed: ' + e.message, 2000);
+            }
+        }
+
+        function base64Decode() {
+            const input = document.getElementById('base64-input').value;
+            if (!input) {
+                showToast('⚠️ Please enter Base64 to decode!', 1500);
+                return;
+            }
+            try {
+                const decoded = decodeURIComponent(escape(atob(input)));
+                document.getElementById('base64-output').value = decoded;
+                showToast('✅ Decoded from Base64!');
+            } catch (e) {
+                showToast('❌ Invalid Base64 input!', 2000);
+            }
+        }
+
+        function clearBase64() {
+            document.getElementById('base64-input').value = '';
+            document.getElementById('base64-output').value = '';
+        }
+
+        // ====================================================
+        //  TAB 4: URL ENCODE / DECODE
+        // ====================================================
+        function urlEncode() {
+            const input = document.getElementById('url-input').value;
+            if (!input) {
+                showToast('⚠️ Please enter text to encode!', 1500);
+                return;
+            }
+            try {
+                const encoded = encodeURIComponent(input);
+                document.getElementById('url-output').value = encoded;
+                showToast('✅ URL encoded!');
+            } catch (e) {
+                showToast('❌ Encoding failed: ' + e.message, 2000);
+            }
+        }
+
+        function urlDecode() {
+            const input = document.getElementById('url-input').value;
+            if (!input) {
+                showToast('⚠️ Please enter text to decode!', 1500);
+                return;
+            }
+            try {
+                const decoded = decodeURIComponent(input);
+                document.getElementById('url-output').value = decoded;
+                showToast('✅ URL decoded!');
+            } catch (e) {
+                showToast('❌ Invalid URL encoding!', 2000);
+            }
+        }
+
+        function clearUrl() {
+            document.getElementById('url-input').value = '';
+            document.getElementById('url-output').value = '';
+        }
+
+        // ====================================================
+        //  TAB 5: ASCII CONVERTER
+        // ====================================================
+        function textToAscii() {
+            const input = document.getElementById('ascii-input').value;
+            if (!input) {
+                showToast('⚠️ Please enter text!', 1500);
+                return;
+            }
+            const asciiCodes = [];
+            for (let i = 0; i < input.length; i++) {
+                asciiCodes.push(input.charCodeAt(i));
+            }
+            document.getElementById('ascii-output').value = asciiCodes.join(' ');
+            showToast('✅ Converted to ASCII codes!');
+        }
+
+        function asciiToText() {
+            const input = document.getElementById('ascii-input').value.trim();
+            if (!input) {
+                showToast('⚠️ Please enter ASCII codes!', 1500);
+                return;
+            }
+            try {
+                const codes = input.split(/\s+/).map(Number);
+                const text = String.fromCharCode(...codes);
+                document.getElementById('ascii-output').value = text;
+                showToast('✅ Converted from ASCII codes!');
+            } catch (e) {
+                showToast('❌ Invalid ASCII codes!', 2000);
+            }
+        }
+
+        function clearAscii() {
+            document.getElementById('ascii-input').value = '';
+            document.getElementById('ascii-output').value = '';
+        }
+
+        // ====================================================
+        //  TAB 6: BINARY CONVERTER
+        // ====================================================
+        function textToBinary() {
+            const input = document.getElementById('binary-input').value;
+            if (!input) {
+                showToast('⚠️ Please enter text!', 1500);
+                return;
+            }
+            const binaryArray = [];
+            for (let i = 0; i < input.length; i++) {
+                const bin = input.charCodeAt(i).toString(2).padStart(8, '0');
+                binaryArray.push(bin);
+            }
+            document.getElementById('binary-output').value = binaryArray.join(' ');
+            showToast('✅ Converted to binary!');
+        }
+
+        function binaryToText() {
+            const input = document.getElementById('binary-input').value.trim();
+            if (!input) {
+                showToast('⚠️ Please enter binary!', 1500);
+                return;
+            }
+            try {
+                const binaryStrings = input.split(/\s+/);
+                const charCodes = binaryStrings.map(bin => parseInt(bin, 2));
+                const text = String.fromCharCode(...charCodes);
+                document.getElementById('binary-output').value = text;
+                showToast('✅ Converted from binary!');
+            } catch (e) {
+                showToast('❌ Invalid binary input!', 2000);
+            }
+        }
+
+        function clearBinary() {
+            document.getElementById('binary-input').value = '';
+            document.getElementById('binary-output').value = '';
+        }
+    </script>
+
+</body>
+</html>
+
