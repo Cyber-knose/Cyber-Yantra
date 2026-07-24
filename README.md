@@ -5,8 +5,12 @@
 ### 🔐 All-in-One Cybersecurity Toolkit
 
 Hash Generator • File Hash • Base64 • URL • ASCII • Binary
-
-<img src="logo.png" width="220">
+<p align="center">
+  <img src="logo.png"
+       width="180"
+       height="180"
+       style="border-radius:50%;">
+</p>
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
